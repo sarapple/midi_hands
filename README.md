@@ -30,17 +30,25 @@ python learn.py
 
 ## To run the model
 
-- Rename `/example/trains.example.json` to `trains.json` and move it to the root of the folder. C
+- Add musicxml files numbered as 0000.musicxml, 0001.musicxml... to `source_data/musicxml`
+- Rename `/example/trains.example.json` to `trains.json` and move it to the root of the folder. 
 - Then call the following command:
 ```
 python learn.py
 ```
 
+Outputs:
+
+- MusicXML will be stored in `output/train_output/progress/{your_model_name}`.
+- A state object for evey epoch will be created in `output/train_output/progress/{your_model_name}.pth`.
+- The final model will be stored as `output/train_output/completed/{your_model_name}.pth`
+
 ## To generate a midi file from an original with left and right hand encodings
 
+- Ensure the `train.json` file contains only one parameter set, and that it is the same one used for learning.
 - Call the following command:
 ```
-python inference.py my_midi_input.mid my_midi_output.mid
+python inference.py example/checkpoint.pth example/simple_midi.example.mid output/output.mid
 ```
 
 ## Credits
