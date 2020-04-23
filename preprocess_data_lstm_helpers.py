@@ -1,19 +1,11 @@
 import json
 import os
-import shutil
 
 from numpy import array
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
-from sklearn.preprocessing import RobustScaler
-# TODO: Try different normalizers
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.preprocessing import minmax_scale
-from sklearn.preprocessing import MaxAbsScaler
 from sklearn.preprocessing import StandardScaler
-from sklearn.preprocessing import Normalizer
-from sklearn.preprocessing import QuantileTransformer
-from sklearn.preprocessing import PowerTransformer
 from operator import itemgetter
 from utils import Utils
 
