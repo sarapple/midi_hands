@@ -1,8 +1,8 @@
 import os
 import json
 
-from libs.magenta_musicxml.magenta_musicxml_parser import MusicXMLDocument
-from utils import Utils
+from midi_hands.libs.magenta_musicxml.magenta_musicxml_parser import MusicXMLDocument
+from midi_hands.utils import Utils
 
 class PreprocessDataMusicXMLHelpers():
     '''Take music XML files and convert them to json data files'''

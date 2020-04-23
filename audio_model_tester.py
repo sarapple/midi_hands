@@ -1,7 +1,7 @@
 import torch
 
-from audio_model_builder import AudioModelBuilder
-from audio_model_runner import AudioModelRunner
+from midi_hands.audio_model_builder import AudioModelBuilder
+from midi_hands.audio_model_runner import AudioModelRunner
 
 class AudioModelTester():
     '''Similar to the AudioModelRunner, but training is severely simplified for sanity checking'''

@@ -1,12 +1,13 @@
 import torch
 import mido
 from mido import MidiTrack, MidiFile, Message
-from preprocess_data_lstm_helpers import PreprocessDataLSTMHelpers
-from utils import Utils
+from midi_hands.preprocess_data_lstm_helpers import PreprocessDataLSTMHelpers
+from midi_hands.utils import Utils
 
 class PreprocessMIDIInferenceData():
     @staticmethod
     def midifile_to_dict(mid):
+        '''Pull out midi messages and specifically get note_on and note_off messages'''
         notes = []
         other_messages = []
         time_so_far = 0
@@ -34,6 +35,7 @@ class PreprocessMIDIInferenceData():
 
     @staticmethod
     def normalize_all_notes(all_notes):
+        '''Normalize the inputted midi notes (already combined on/off)'''
         normalizers = PreprocessDataLSTMHelpers.get_all_normalizers()
         for note_datum in all_notes:
             input_data = note_datum["input_data"]
@@ -54,6 +56,7 @@ class PreprocessMIDIInferenceData():
 
     @staticmethod
     def get_on_off_note_pairs(notes):
+        '''Midi files contain note on and note off messages. Find the matching note on/off combination and pull all into a dictionary.'''
         all_notes = []
 
         for note_idx, note in enumerate(notes):
@@ -89,6 +92,7 @@ class PreprocessMIDIInferenceData():
 
     @staticmethod
     def combine_on_off_notes(notes):
+        '''From the dictionaries { note_on_notes: x, note_off_note: y... } pull them out and flatten into an array'''
         all_notes_flat = []
         for full_note_datum in notes:
             note_on = full_note_datum["note_on_note"]
@@ -101,6 +105,9 @@ class PreprocessMIDIInferenceData():
     
     @staticmethod
     def get_midi_messages_and_fix_deltas(time_sorted_notes):
+        '''After the messages have been sorted into absolute time,
+        we need to fix the deltas between them as they may have shifted
+        in the process of splitting the notes into two tracks (left/right hand tracks)'''
         last_time_so_far = 0
         midi_messages = []
         for note in time_sorted_notes:
@@ -121,6 +128,9 @@ class PreprocessMIDIInferenceData():
     
     @staticmethod
     def organize_song_by_time(all_notes):
+        '''The note dictionaries { hand: x, time_so_far: y... } have information
+        for absolute time within the song. Split songs by the 'hand' property
+        and sort by the 'time_so_far' property. Returns a tuple of left and right hand notes'''
         left_handed_notes = [note for note in all_notes if note["hand"] == "LEFT"]
         right_handed_notes = [note for note in all_notes if note["hand"] == "RIGHT"]
 
@@ -144,6 +154,7 @@ class PreprocessMIDIInferenceData():
         
     @staticmethod
     def get_midi_file_with_handedness(all_notes):
+        '''Takes in the note dictionaries for all notes and returns a mido MidiFile.'''
         outfile = MidiFile()
         right_hand_track = MidiTrack()
         left_hand_track = MidiTrack()
@@ -167,6 +178,8 @@ class PreprocessMIDIInferenceData():
 
     @staticmethod
     def get_handedness_from_all_notes(model=None, midi_input_filename=None):
+        '''Get handedness information from a midi input filename,
+        passed through a neural net LSTM model and returns an array of handedness.'''
         mid = mido.MidiFile(midi_input_filename)
         (notes, _other_messages) = PreprocessMIDIInferenceData.midifile_to_dict(mid)
 
@@ -201,6 +214,8 @@ class PreprocessMIDIInferenceData():
         model,
         midi_input_filename
     ):
+        '''Get handedness information from a midi input filename,
+        passed through a neural net LSTM model and returns a mido MidiFile to be saved somewhere'''
         hands_and_notes = PreprocessMIDIInferenceData.get_handedness_from_all_notes(model=model, midi_input_filename=midi_input_filename)
 
         return PreprocessMIDIInferenceData.get_midi_file_with_handedness(hands_and_notes)

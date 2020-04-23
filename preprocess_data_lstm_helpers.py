@@ -7,7 +7,7 @@ from sklearn.utils import shuffle
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import StandardScaler
 from operator import itemgetter
-from utils import Utils
+from midi_hands.utils import Utils
 
 class PreprocessDataLSTMHelpers():
     '''Class exists for the purpose of preprocessing the data

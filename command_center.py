@@ -2,14 +2,14 @@ import torch
 import json
 import mido
 from mido import MidiTrack, MidiFile, Message, MetaMessage
-from preprocess_data_musicxml_helpers import PreprocessDataMusicXMLHelpers
-from preprocess_data_lstm_helpers import PreprocessDataLSTMHelpers
-from audio_model_runner import AudioModelRunner
-from audio_model_tester import AudioModelTester
-from audio_model_builder import AudioModelBuilder
-from mobile import Mobile
-from utils import Utils
-from preprocess_midi_inference_data import PreprocessMIDIInferenceData
+from midi_hands.preprocess_data_musicxml_helpers import PreprocessDataMusicXMLHelpers
+from midi_hands.preprocess_data_lstm_helpers import PreprocessDataLSTMHelpers
+from midi_hands.audio_model_runner import AudioModelRunner
+from midi_hands.audio_model_tester import AudioModelTester
+from midi_hands.audio_model_builder import AudioModelBuilder
+from midi_hands.mobile import Mobile
+from midi_hands.utils import Utils
+from midi_hands.preprocess_midi_inference_data import PreprocessMIDIInferenceData
 
 class CommandCenter():
     @staticmethod

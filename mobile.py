@@ -1,5 +1,5 @@
 import torch
-from utils import Utils
+from midi_hands.utils import Utils
 from torch.utils.tensorboard import SummaryWriter
 import numpy as np
 
