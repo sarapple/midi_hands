@@ -177,25 +177,47 @@ class PreprocessMIDIInferenceData():
         return outfile
 
     @staticmethod
+    def run_inference_and_get_flat_results(model, notes_chunked_full, sequence_length):
+        # We need to worry about if the last chunk is less than the sequence, as the model is trained in sequences of 16
+        last_chunk_index = len(notes_chunked_full)-1
+        last_chunk_length = len(notes_chunked_full[last_chunk_index])
+        is_last_chunk_too_short = last_chunk_length != sequence_length
+
+        if (is_last_chunk_too_short):
+            second_to_last_chunk_full = notes_chunked_full[last_chunk_index-1]
+            second_to_last_chunk_partial = [note for note in second_to_last_chunk_full] # grab a copy of the second to last chunk
+            
+            spliced = second_to_last_chunk_partial[0:sequence_length - last_chunk_length] # get the number of notes needed to make the last chunk's sequence 16
+            remaining = notes_chunked_full.pop() # remove the last one
+            for note in spliced:
+                remaining.append(note) # add the number of notes needed to make the last chunk's sequence 16
+            notes_chunked_full.append(remaining) # push it back into notes_chunked
+
+        result = model(torch.tensor(notes_chunked_full, dtype=torch.float))
+
+        # remove the dummy notes added above
+        flat_result_with_dummy_data = [item for sublist in result for item in sublist]
+        flat_result = flat_result_with_dummy_data[0:-1*(sequence_length - last_chunk_length)]
+
+        return flat_result
+
+    @staticmethod
     def get_handedness_from_all_notes(model=None, midi_input_filename=None):
         '''Get handedness information from a midi input filename,
         passed through a neural net LSTM model and returns an array of handedness.'''
+        sequence_length = 16
         mid = mido.MidiFile(midi_input_filename)
         (notes, _other_messages) = PreprocessMIDIInferenceData.midifile_to_dict(mid)
 
         on_off_pairs_of_notes = PreprocessMIDIInferenceData.get_on_off_note_pairs(notes)
         notes_normalized = PreprocessMIDIInferenceData.normalize_all_notes(on_off_pairs_of_notes)
-        notes_chunked = Utils.chunks([note["normalized_input_data"] for note in notes_normalized], 16)
+        notes_chunked = Utils.chunks([note["normalized_input_data"] for note in notes_normalized], sequence_length)
         notes_chunked_full = [chunk for chunk in notes_chunked]
-        remaining = notes_chunked_full.pop() # figure out how to repeat this
-        result = model(torch.tensor(notes_chunked_full, dtype=torch.float))
+        flat_result = PreprocessMIDIInferenceData.run_inference_and_get_flat_results(model, notes_chunked_full, sequence_length)
 
-        flat_result = [item for sublist in result for item in sublist]
         all_hands = [
             ("RIGHT" if output <= 0 else "LEFT")
             for output in flat_result
-        ] + [
-            "RIGHT" for feature_index in remaining
         ]
         hands_and_notes = [
             {
