@@ -1,0 +1,7 @@
+matplotlib
+torch
+pydub
+sklearn
+numpy
+tensorboardx
+mido

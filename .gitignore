@@ -1,0 +1,6 @@
+__pycache__
+.vscode
+source_data/*
+trains.json
+output
+runs
