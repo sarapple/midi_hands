@@ -22,14 +22,6 @@ A checkpoint is made available for others to use in the `/example` folder. Param
 
 ## To run the model
 
-- Rename `/example/trains.example.json` to `trains.json` and move it to the root of the folder. C
-- Then call the following command:
-```
-python learn.py
-```
-
-## To run the model
-
 - Add musicxml files numbered as 0000.musicxml, 0001.musicxml... to `source_data/musicxml`
 - Rename `/example/trains.example.json` to `trains.json` and move it to the root of the folder. 
 - Then call the following command:
