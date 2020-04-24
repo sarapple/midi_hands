@@ -129,4 +129,4 @@ class CommandCenter():
             model,
             midi_input_filename=midi_input_filename
         )
-        midifile.save(midi_output_filename)
+        midifile.save(file=midi_output_filename)

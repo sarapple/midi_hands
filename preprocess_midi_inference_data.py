@@ -209,7 +209,7 @@ class PreprocessMIDIInferenceData():
         '''Get handedness information from a midi input filename,
         passed through a neural net LSTM model and returns an array of handedness.'''
         sequence_length = 16
-        mid = mido.MidiFile(midi_input_filename)
+        mid = mido.MidiFile(file=midi_input_filename)
         (notes, _other_messages) = PreprocessMIDIInferenceData.midifile_to_dict(mid)
 
         on_off_pairs_of_notes = PreprocessMIDIInferenceData.get_on_off_note_pairs(notes)
