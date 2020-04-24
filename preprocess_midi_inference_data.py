@@ -178,6 +178,9 @@ class PreprocessMIDIInferenceData():
 
     @staticmethod
     def run_inference_and_get_flat_results(model, notes_chunked_full, sequence_length):
+        if (len(notes_chunked_full) == 0):
+            return []
+
         # We need to worry about if the last chunk is less than the sequence, as the model is trained in sequences of 16
         last_chunk_index = len(notes_chunked_full)-1
         last_chunk_length = len(notes_chunked_full[last_chunk_index])
