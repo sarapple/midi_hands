@@ -66,8 +66,15 @@ class PreprocessMIDIInferenceData():
                     potential_off_note = notes[potential_off_note_index]
 
                     if (
-                        potential_off_note["type"] == "note_off"
-                        and note["velocity"] == potential_off_note["velocity"]
+                        # some midi files use a "note_off" event to indicate a note is complete
+                        (
+                            potential_off_note["type"] == "note_off"
+                            and note["velocity"] == potential_off_note["velocity"]
+                        ) or (
+                            # some midi files use a "note_on" event with velocity 0 to indicate a note is complete
+                            potential_off_note["type"] == "note_on"
+                            and note["velocity"] == 0
+                        )
                         and note["note"] == potential_off_note["note"]
                     ):
                         all_notes.append(
