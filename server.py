@@ -23,7 +23,7 @@ def get_midi_from_midi(data):
     
     return save_path_with_left_right
 
-@limiter.limit("100/day;20/hour;1/minute")
+@limiter.limit("100/day;20/hour;2/minute")
 @app.route('/')
 def load_home():
     return render_template('index.html')

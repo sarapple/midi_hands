@@ -4,7 +4,7 @@ import argparse
 from command_center import CommandCenter
 
 def inference(model_path, input_midi_file, output_midi_file):
-    with open("./midi_hands/example/trains.example.json") as open_file:
+    with open("./example/trains.example.json") as open_file:
         trains = json.load(open_file)
 
     # Select the correct parameters this model was previously trained in, before inference

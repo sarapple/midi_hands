@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script
+        src="https://code.jquery.com/jquery-3.5.0.js"
+        integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
+        crossorigin="anonymous"></script>
+    <script>
+        function download(filename, blob) {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'file.mid';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            alert('your file has downloaded!');
+        }
+        $(document).ready(() => {
+            document.querySelector('#fileInput').addEventListener('change',   function () {
+
+                var reader = new FileReader();
+                var selectedFile = this.files[0];
+
+                reader.onload = function () {
+                    var bytesArray = this.result;
+                    fetch('/midi-to-midi', {
+                        method: "POST",
+                        contentType: "application/octet-stream",
+                        body: bytesArray
+                    })
+                    .then((resp) => {
+                        if (resp.status !== 200) {
+                            throw new Error("Response from server was not successful");
+                        }
+                        return resp.blob();
+                    })
+                    .then((blob) => {
+                        download("audio_midi.mid", blob);
+                    })
+                    .catch((reason) => {
+                        alert(reason);
+                    })
+                }
+                reader.readAsArrayBuffer(selectedFile);
+            }, false);
+        });
+
+    </script>
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <h2>Add a MIDI file here</h2>
+        <p>The server will return a MIDI file with left and right hands encoded.</p>
+        <input id="fileInput" type="file" accept="audio/x-midi, audio/midi" />
+    </div>
+</body>
+</html>
