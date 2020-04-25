@@ -1,7 +1,7 @@
 import torch
 
-from midi_hands.utils import Utils
-from midi_hands.lstm_audio import LSTMAudio
+from utils import Utils
+from lstm_audio import LSTMAudio
 # Do not import AudioModelRunner. The runner should always import the builder.
 
 class AudioModelBuilder():

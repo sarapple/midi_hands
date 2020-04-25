@@ -24,7 +24,7 @@ import fractions
 import xml.etree.ElementTree as ET
 import zipfile
 
-import midi_hands.libs.magenta_musicxml.magenta_musicxml_constants as constants
+import libs.magenta_musicxml.magenta_musicxml_constants as constants
 import six
 
 Fraction = fractions.Fraction

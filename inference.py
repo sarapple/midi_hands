@@ -1,7 +1,7 @@
 import json
 import argparse
 
-from midi_hands.command_center import CommandCenter
+from command_center import CommandCenter
 
 def inference(model_path, input_midi_file, output_midi_file):
     with open("./midi_hands/example/trains.example.json") as open_file:

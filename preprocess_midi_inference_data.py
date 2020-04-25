@@ -1,8 +1,8 @@
 import torch
 import mido
 from mido import MidiTrack, MidiFile, Message
-from midi_hands.preprocess_data_lstm_helpers import PreprocessDataLSTMHelpers
-from midi_hands.utils import Utils
+from preprocess_data_lstm_helpers import PreprocessDataLSTMHelpers
+from utils import Utils
 
 class PreprocessMIDIInferenceData():
     @staticmethod
