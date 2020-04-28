@@ -40,7 +40,7 @@ Outputs:
 - Ensure the `train.json` file contains only one parameter set, and that it is the same one used for learning. If trying it out, please rename `train.example.json` to `train.json` and move it to the project root level and run the inference.
 - Call the following command:
 ```
-mv example/train.example.json ./train.json
+mv example/trains.example.json ./trains.json
 python inference.py example/checkpoint.pth example/simple_midi.example.mid output/output.mid
 ```
 
